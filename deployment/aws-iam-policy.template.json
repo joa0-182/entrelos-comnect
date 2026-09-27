@@ -1,0 +1,25 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadOnlyOwnOrganizationSecret",
+      "Effect": "Allow",
+      "Action": "secretsmanager:GetSecretValue",
+      "Resource": "arn:aws:secretsmanager:${aws:RequestedRegion}:${aws:PrincipalAccount}:secret:entrelos/comnect/${aws:PrincipalTag/organization_id}/*"
+    },
+    {
+      "Sid": "DecryptOnlyThroughSecretsManager",
+      "Effect": "Allow",
+      "Action": "kms:Decrypt",
+      "Resource": "{{KMS_KEY_ARN_FOR_ORGANIZATION}}",
+      "Condition": {
+        "StringEquals": {
+          "kms:ViaService": "secretsmanager.${aws:RequestedRegion}.amazonaws.com"
+        },
+        "StringLike": {
+          "kms:EncryptionContext:aws:secretsmanager:arn": "arn:aws:secretsmanager:${aws:RequestedRegion}:${aws:PrincipalAccount}:secret:entrelos/comnect/${aws:PrincipalTag/organization_id}/*"
+        }
+      }
+    }
+  ]
+}

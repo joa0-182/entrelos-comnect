@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://entrelos.example/contracts/control-plane-comnect/v1",
+  "title": "Control Plane - Comnect v1",
+  "description": "Contrato de controle. Lotes de ERP não fazem parte deste contrato.",
+  "oneOf": [
+    { "$ref": "#/$defs/executionCommand" },
+    { "$ref": "#/$defs/authorizationGrant" },
+    { "$ref": "#/$defs/executionStatus" }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{2,127}$"
+    },
+    "executionCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "kind", "execution_id", "organization_id", "installation_id", "operation_id", "parameters"],
+      "properties": {
+        "contract_version": { "const": "v1" },
+        "kind": { "const": "execution_command" },
+        "execution_id": { "$ref": "#/$defs/identifier" },
+        "organization_id": { "$ref": "#/$defs/identifier" },
+        "installation_id": { "$ref": "#/$defs/identifier" },
+        "operation_id": { "type": "string", "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+\\.v[1-9][0-9]*$" },
+        "parameters": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "authorizationGrant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "kind", "authorized", "execution_id", "organization_id", "installation_id", "operation_id", "source_id", "secret_reference", "expires_at", "parameter_scope"],
+      "properties": {
+        "contract_version": { "const": "v1" },
+        "kind": { "const": "authorization_grant" },
+        "authorized": { "const": true },
+        "execution_id": { "$ref": "#/$defs/identifier" },
+        "organization_id": { "$ref": "#/$defs/identifier" },
+        "installation_id": { "$ref": "#/$defs/identifier" },
+        "operation_id": { "type": "string", "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+\\.v[1-9][0-9]*$" },
+        "source_id": { "$ref": "#/$defs/identifier" },
+        "secret_reference": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "expires_at": { "type": "string", "format": "date-time" },
+        "parameter_scope": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "allowed_values": { "type": "array", "items": { "type": ["string", "number", "integer", "boolean"] } },
+              "minimum": { "type": "number" },
+              "maximum": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "executionStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "kind", "execution_id", "state"],
+      "properties": {
+        "contract_version": { "const": "v1" },
+        "kind": { "const": "execution_status" },
+        "execution_id": { "$ref": "#/$defs/identifier" },
+        "state": { "enum": ["accepted", "completed", "denied", "expired", "revoked", "failed"] },
+        "batch_count": { "type": "integer", "minimum": 0 },
+        "row_count": { "type": "integer", "minimum": 0 },
+        "error_code": { "type": "string", "maxLength": 80 }
+      }
+    }
+  }
+}

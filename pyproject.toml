@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "entrelos-comnect"
+version = "0.1.0"
+description = "Conector de dados de saída para fontes internas de organizações Entrelos."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+aws = ["boto3>=1.35"]
+sqlserver = ["pyodbc>=5.2"]
+windows-service = ["pywin32>=308; platform_system == 'Windows'"]
+dev = ["ruff>=0.9"]
+
+[project.scripts]
+entrelos-comnect = "entrelos_comnect.bootstrap:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/entrelos_comnect"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.format]
+quote-style = "double"

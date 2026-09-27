@@ -1,0 +1,20 @@
+{
+  "organization_id": "org_lojas_sp_homologacao",
+  "installation_id": "inst_lojas_sp_01",
+  "control_plane_url": "https://control-plane.example.invalid",
+  "data_plane_url": "https://data-plane.example.invalid",
+  "aws_region": "sa-east-1",
+  "mtls": {
+    "certificate_path": "C:\\ProgramData\\Entrelos\\Comnect\\identity.crt",
+    "private_key_path": "C:\\ProgramData\\Entrelos\\Comnect\\identity.key",
+    "ca_bundle_path": "C:\\ProgramData\\Entrelos\\Comnect\\ca.pem"
+  },
+  "sources": {
+    "lojas_sp_sqlserver": {
+      "host": "sqlserver-homologacao.interno",
+      "database": "ERP_HOMOLOGACAO",
+      "driver": "ODBC Driver 18 for SQL Server",
+      "batch_size": 500
+    }
+  }
+}

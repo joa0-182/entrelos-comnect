@@ -1,0 +1,13 @@
+.venv/
+.uv-cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.env
+*.log
+config/comnect.json
+*.pfx
+*.pem
+*.key
